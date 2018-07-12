@@ -27,13 +27,13 @@ print('Analytic failure probability: {:.4f}'.format(p_fail))
 # Monte Carlo solution
 rod_model = pm.Model()
 with rod_model:
-	# Setup model
-	strength = pm.Normal('strength', mu=strength_mean, sd=strength_sd)
-	load = pm.Normal('load', mu=load_mean, sd=load_sd)
-	margin = pm.Deterministic('margin', strength - load)
+    # Setup model
+    strength = pm.Normal('strength', mu=strength_mean, sd=strength_sd)
+    load = pm.Normal('load', mu=load_mean, sd=load_sd)
+    margin = pm.Deterministic('margin', strength - load)
 
-	# Sample & fit
-	trace = pm.sample(1000)
+    # Sample & fit
+    trace = pm.sample(1000)
 pm.traceplot(trace)
 
 m_samples = trace['margin']
@@ -43,10 +43,10 @@ print('Monte-Carlo failure probability: {:.4f}'.format(p_fail_mc))
 plt.figure()
 ax = plt.subplot(111)
 pm.plots.kdeplot(trace['margin'], ax=ax,
-	label='Monte Carlo, $p_{{fail}}={:.4f}$'.format(p_fail_mc))
+    label='Monte Carlo, $p_{{fail}}={:.4f}$'.format(p_fail_mc))
 x = np.linspace(m_mean - 4 * m_sd, m_mean + 4 * m_sd, 100)
 plt.plot(x, m_rv.pdf(x), linestyle='--', color='black',
-	label='Analytic, $p_{{fail}}={:.4f}$'.format(p_fail))
+    label='Analytic, $p_{{fail}}={:.4f}$'.format(p_fail))
 plt.fill_between(x[x <= 0], 0, m_rv.pdf(x[x <= 0]), facecolor='red', alpha=0.5)
 plt.axvline(x=0, color='red')
 plt.title('Margin')
